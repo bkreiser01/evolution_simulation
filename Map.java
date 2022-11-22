@@ -96,6 +96,10 @@ public class Map {
         		}
         	}
         	
+        	for (Ground p : plants) {
+        		p.update();
+        	}
+        	
         	// Clean up the dead
         	for (Animal a : animals) {
         		if (a.isDead()) {
@@ -116,7 +120,6 @@ public class Map {
             for (int j = 0; j < width; j++) {
                 switch (ground[i][j].getType()) {
                 	case 'A':
-                		System.out.println(ground[i][j].getObj());
                 		animals_alive++;
                 		break;
                 	case 'G':
