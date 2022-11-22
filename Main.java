@@ -9,6 +9,8 @@ public class Main {
 	private static final int plants_c = 200; 	//Plants Count
 	private static final int plants_g = 10;		//Plants Growth Period
 	
+	private static final int iterations = 1000; 	//World iterations
+	
 	
 	public static void main(String args[]) {
         Map world = new Map(map_x,map_y);
@@ -16,7 +18,7 @@ public class Main {
         Ground[] plants = new Ground[plants_c];
 
         for (int i = 0; i < animals.length; i++) {
-            animals[i] = new Animal();
+            animals[i] = new Rabbit();
         }
 
         for (int i = 0; i < plants.length; i++) {
@@ -26,12 +28,10 @@ public class Main {
         world.populate(animals);
         world.plant(plants);
         
-        System.out.println("START");
         System.out.println(world);
-        
-        world.update(1000);
-        
+        System.out.println(world.observe());
+        world.update(iterations);
         System.out.println(world);
-        System.out.println("END");
+        System.out.println(world.observe());
     }
 }

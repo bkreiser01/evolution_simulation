@@ -90,21 +90,28 @@ public class Map {
     public void update(int count) {
     	for (int i = 0; i < count; i++) {
     		// Update animals
-        	for (Animal a : animals) {
-        		if (!a.isDead()) {
-        			a.update(this);
-        		}
-        	}
+    		if (animals != null) {
+    			for (Animal a : animals) {
+            		if (!a.isDead()) {
+            			a.update(this);
+            		}
+            	}
+    		}
         	
-        	for (Ground p : plants) {
-        		p.update();
+        	// Update plants
+        	if (plants != null) {
+        		for (Ground p : plants) {
+            		p.update();
+            	}
         	}
         	
         	// Clean up the dead
-        	for (Animal a : animals) {
-        		if (a.isDead()) {
-        			a.getTile().setObj(new Ground());
-        		}
+        	if (animals != null) {
+        		for (Animal a : animals) {
+            		if (a.isDead()) {
+            			a.getTile().setObj(new Ground());
+            		}
+            	}
         	}
         	cycle++;
         }
@@ -113,14 +120,21 @@ public class Map {
     public String observe() {
     	StringBuilder r_str = new StringBuilder();
     	int animals_alive = 0;
+    	int rabbits_alive = 0;
+    	int rabbit_males = 0;
     	int grass_count = 0;
-    	
     	
     	for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 switch (ground[i][j].getType()) {
                 	case 'A':
                 		animals_alive++;
+                		break;
+                	case 'R':
+                		rabbits_alive++;
+                		if (((Rabbit)(ground[i][j].getObj())).getGender() == 0) {
+                			rabbit_males++;
+                		}
                 		break;
                 	case 'G':
                 		grass_count++;
@@ -129,9 +143,13 @@ public class Map {
             	
             }
         }
+    	
     	r_str.append("Cycle: " + cycle + '\n');
-    	r_str.append("Animals Alive: " + animals_alive + '\n');
-    	r_str.append("Grass Count: " + grass_count);
+    	r_str.append("Animals Alive: " + (animals_alive + rabbits_alive) + '\n');
+    	r_str.append("Rabbits Alive: " + rabbits_alive + '\n');
+    	r_str.append("    M: " + rabbit_males + '\n');
+    	r_str.append("    F: " + (rabbits_alive - rabbit_males) + '\n');
+    	r_str.append("Grass Count: " + grass_count + '\n');
     	
     	return r_str.toString();
     }
@@ -187,8 +205,6 @@ public class Map {
             }
             r_str.append("|\n");
         }
-        
-        r_str.append(this.observe());
 
         return r_str.toString();
     }

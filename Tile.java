@@ -21,7 +21,9 @@ public class Tile{
     
     public char getType(){
         switch (((Object)obj).getClass().getSimpleName()) {
-            case "Animal":
+        	case "Rabbit":
+        		return 'R';
+        	case "Animal":
                 return 'A';
             case "Ground":
             	if (((Ground)(obj)).hasGrass()) {

@@ -5,6 +5,7 @@ public class Animal extends Tileable {
 	
 	private int hunger; // max 100, min 0
 	private int m_factor; // metabolism factor 1-5
+	private int gender;
 	private boolean dead;
 	
 	
@@ -13,6 +14,7 @@ public class Animal extends Tileable {
     	super();
         this.setType('A');
         hunger = 100;
+        gender = (int)(Math.random()*(2));
         dead = false;
         m_factor = (int)(Math.random()*(5))+1;
     }
@@ -22,11 +24,13 @@ public class Animal extends Tileable {
         return type;
     }
 
-    
     public boolean isDead() {
     	return dead;
     }
 
+    public int getGender() {
+    	return gender;
+    }
     // Setters
     public void setType(char c) {
         type = c;
@@ -71,9 +75,10 @@ public class Animal extends Tileable {
     	if (nextTile == null) {
     		return -1;
     	}
-    	if (nextTile.getType() == 'G') {
-    		//System.out.println("YUMMY FOOD");
-    		hunger += ((Ground)(nextTile.getObj())).eat();
+    	if (nextTile.getType() != ' ' && nextTile.getType() != this.getTile().getType()) {
+    		if (nextTile.getType() == 'G' ) {
+    			hunger += ((Ground)(nextTile.getObj())).eat();
+    		}
     		this.setTile(world.swapTiles(this.getTile(), nextTile));
     		return 0;
     	}
@@ -84,7 +89,7 @@ public class Animal extends Tileable {
     	
     	
     }
-    
+	
     public void kill(Map world) {
     	dead = true;
     }
@@ -106,8 +111,10 @@ public class Animal extends Tileable {
     public String toString() {
     	return "[Animal]\n"
     		 + "Type: " + type + '\n'
+    		 + "Gender: " + gender + '\n'
     		 + "Hunger: " + hunger + '\n'
     		 + "M_factor: " + m_factor + '\n'
+    		 + "isDead: " + dead + '\n'
     		 + "------";
     }
 }
