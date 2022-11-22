@@ -7,6 +7,7 @@ public class Map {
     private Tile[][] ground;
     
     private Animal[] animals;
+    private Ground[] plants;
 
     public Map(int h, int w) {
     	cycle = 0;
@@ -60,13 +61,15 @@ public class Map {
                 int rand_x = (int)(Math.random()*(height));
                 int rand_y = (int)(Math.random()*(width));
                 
-                if (ground[rand_x][rand_y].getType() == 'G') {
+                if (ground[rand_x][rand_y].getType() == ' ') {
                     ground[rand_x][rand_y].setObj(g);
                     g.setTile(ground[rand_x][rand_y]);
                     break;
                 }
             }
         }
+    	
+    	plants = arr;
     }
     
     public Tile swapTiles(Tile a, Tile b) {

@@ -32,14 +32,6 @@ public class Animal extends Tileable {
         type = c;
     }
     
-    public void eat(int i) {
-    	if (hunger + i > 100 ) {
-    		hunger = 100;
-    	} else {
-    		hunger += i;
-    	}
-    }
-    
     // Methods
 	private int moveD(Map world, int d) {
     	int[] c = this.getTile().getCoords();
