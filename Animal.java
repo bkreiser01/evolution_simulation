@@ -1,39 +1,69 @@
 package evolution_simulation;
 
 public class Animal extends Tileable {
-	private char type;
-	
-	private int hunger; // max 100, min 0
-	private int m_factor; // metabolism factor 1-5
-	private int gender;
-	private boolean dead;
+	private char type;				// type of animal
+	private int hunger; 			// max 100, min 0 - starts at 100
+	private int m_factor; 			// metabolism factor 1-5
+	private int gender; 			// 0 for male, 1 for female
+	private int reproductive_urge; 	// max 100, min 0 - starts at 0
+	private boolean dead; 			// either dead or alive
 	
 	
 	// Constructors
     public Animal() {
     	super();
         this.setType('A');
-        hunger = 100;
-        gender = (int)(Math.random()*(2));
+        this.setHunger(100);
+        this.setGender((int)(Math.random()*(2)));
+        this.setMFactor((int)(Math.random()*(5))+1);
+        this.setReproductiveUrge(0);
         dead = false;
-        m_factor = (int)(Math.random()*(5))+1;
     }
 
     // Getters
-    public char getType(){
+    public char getType() {
         return type;
     }
 
-    public boolean isDead() {
-    	return dead;
+    public int getHunger() {
+    	return hunger;
+    }
+    
+    public int getMFactor() {
+    	return m_factor;
     }
 
     public int getGender() {
     	return gender;
     }
+    
+    public int getReproductiveUrge() {
+    	return reproductive_urge;
+    }
+    
+    public boolean isDead() {
+    	return dead;
+    }
+    
     // Setters
     public void setType(char c) {
         type = c;
+    }
+    
+    private void setHunger(int i) {
+    	hunger = i;
+    }
+    
+    private void setGender(int i) {
+    	gender = i;
+    }
+    
+    private void setMFactor(int i) {
+    	m_factor = i;
+    }
+    
+    private void setReproductiveUrge(int i) {
+    	reproductive_urge = i;
     }
     
     // Methods
@@ -75,11 +105,22 @@ public class Animal extends Tileable {
     	if (nextTile == null) {
     		return -1;
     	}
+    	
     	if (nextTile.getType() != ' ' && nextTile.getType() != this.getTile().getType()) {
     		if (nextTile.getType() == 'G' ) {
     			hunger += ((Ground)(nextTile.getObj())).eat();
     		}
     		this.setTile(world.swapTiles(this.getTile(), nextTile));
+    		return 0;
+    	}
+    	
+    	if (nextTile.getType() != ' ' && nextTile.getType() == this.getTile().getType()) {
+    		Animal potential_mate = (Animal)(nextTile.getObj());
+    		
+    		if (potential_mate.getGender() != this.getGender() && reproductive_urge > hunger) {
+    			System.out.println("MATE FOUND :)");
+    			reproductive_urge = 0;
+    		}
     		return 0;
     	}
     	
@@ -106,6 +147,8 @@ public class Animal extends Tileable {
     	if (hunger <= 0) {
     		this.kill(world);
     	}
+    	
+    	reproductive_urge += (int)(Math.random()*(5));
     }
     
     public String toString() {
