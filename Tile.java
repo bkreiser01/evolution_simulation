@@ -24,7 +24,7 @@ public class Tile{
             case "Animal":
                 return 'A';
             case "Ground":
-            	return ' ';
+            	return ((Ground)(obj)).getGroundType();
             default:
                 return 'N';
         }

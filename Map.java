@@ -15,7 +15,7 @@ public class Map {
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
             	int[] tmp = {i, j};
-                ground[i][j] = new Tile(tmp, new Ground());
+                ground[i][j] = new Tile(tmp, new Ground(' '));
             }
         }
     }
@@ -79,7 +79,7 @@ public class Map {
         	// Clean up the dead
         	for (Animal a : animals) {
         		if (a.isDead()) {
-        			a.getTile().setObj(new Ground());
+        			a.getTile().setObj(new Ground(' '));
         		}
         	}
         }
