@@ -15,7 +15,7 @@ public class Main {
         System.out.println("START");
         System.out.println(world);
         
-        world.update(101);
+        world.update(99);
         
         System.out.println(world);
         System.out.println("END");

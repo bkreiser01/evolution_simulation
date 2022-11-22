@@ -5,6 +5,7 @@ public class Animal {
 	private Tile currentTile;
 	
 	private int hunger; // max 100, min 0
+	private int m_factor; // metabolism factor 1-5
 	private boolean dead;
 	
 	
@@ -13,6 +14,7 @@ public class Animal {
         this.setType('A');
         hunger = 100;
         dead = false;
+        m_factor = (int)(Math.random()*(6));
     }
 
     // Getters
@@ -82,7 +84,7 @@ public class Animal {
     	
     	if (nextTile != null) {
     		currentTile = world.swapTiles(currentTile, nextTile);
-    		hunger--;
+    		hunger -= m_factor;
     		return 0;
     	}
     	return -1;
