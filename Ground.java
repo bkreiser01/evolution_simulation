@@ -1,22 +1,31 @@
 package evolution_simulation;
 
-public class Ground {
-	char type;
+public class Ground extends Tileable {
+	boolean grass;
+	int growth_time;
+	
 	
 	// Constructors
-	public Ground(char c) {
-		this.setGroundType(c);
+	public Ground(int i) {
+		grass = true;
+		growth_time = i;
 	}
 	
-	// Setters
-	public void setGroundType(char c) {
-		type = c;
+	public Ground() {
+		grass = false;
 	}
 	
 	// Getters
-	public char getGroundType() {
-		return type;
+	public boolean hasGrass() {
+		return grass;
 	}
 	
 	// Methods
+	public int eat() {
+		if (grass) {
+			grass = false;
+			return 20;
+		}
+		return 0;
+	}
 }

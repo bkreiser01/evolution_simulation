@@ -1,8 +1,7 @@
 package evolution_simulation;
 
-public class Animal {
+public class Animal extends Tileable {
 	private char type;
-	private Tile currentTile;
 	
 	private int hunger; // max 100, min 0
 	private int m_factor; // metabolism factor 1-5
@@ -11,20 +10,18 @@ public class Animal {
 	
 	// Constructors
     public Animal() {
+    	super();
         this.setType('A');
         hunger = 100;
         dead = false;
-        m_factor = (int)(Math.random()*(6));
+        m_factor = (int)(Math.random()*(5))+1;
     }
 
     // Getters
     public char getType(){
         return type;
     }
-    
-    public Tile getTile() {
-    	return currentTile;
-    }
+
     
     public boolean isDead() {
     	return dead;
@@ -33,10 +30,6 @@ public class Animal {
     // Setters
     public void setType(char c) {
         type = c;
-    }
-    
-    public void setTile(Tile t) {
-    	currentTile = t;
     }
     
     public void eat(int i) {
@@ -48,8 +41,8 @@ public class Animal {
     }
     
     // Methods
-    private int moveD(Map world, int d) {
-    	int[] c = currentTile.getCoords();
+	private int moveD(Map world, int d) {
+    	int[] c = this.getTile().getCoords();
     	Tile nextTile;
     	
     	switch (d) {
@@ -82,12 +75,22 @@ public class Animal {
     			break;
     	}
     	
-    	if (nextTile != null) {
-    		currentTile = world.swapTiles(currentTile, nextTile);
-    		hunger -= m_factor;
+    	
+    	if (nextTile == null) {
+    		return -1;
+    	}
+    	if (nextTile.getType() == 'G') {
+    		//System.out.println("YUMMY FOOD");
+    		hunger += ((Ground)(nextTile.getObj())).eat();
+    		this.setTile(world.swapTiles(this.getTile(), nextTile));
     		return 0;
     	}
-    	return -1;
+    	
+    	this.setTile(world.swapTiles(this.getTile(), nextTile));
+		hunger -= m_factor;
+		return 0;
+    	
+    	
     }
     
     public void kill(Map world) {
@@ -106,5 +109,13 @@ public class Animal {
     	if (hunger <= 0) {
     		this.kill(world);
     	}
+    }
+    
+    public String toString() {
+    	return "[Animal]\n"
+    		 + "Type: " + type + '\n'
+    		 + "Hunger: " + hunger + '\n'
+    		 + "M_factor: " + m_factor + '\n'
+    		 + "------";
     }
 }

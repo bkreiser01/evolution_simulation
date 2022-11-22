@@ -24,7 +24,10 @@ public class Tile{
             case "Animal":
                 return 'A';
             case "Ground":
-            	return ((Ground)(obj)).getGroundType();
+            	if (((Ground)(obj)).hasGrass()) {
+            		return 'G';
+            	}
+            	return ' ';
             default:
                 return 'N';
         }
@@ -44,7 +47,7 @@ public class Tile{
     }
     
     public String toString() {
-    	return "------\n[TILE]\n"
+    	return "[TILE]\n"
     		 + "Type: " + this.getType() + "\n"
     		 + "Coords: " + cords[1] + ", " + cords[0] + "\n"
     		 + "------";

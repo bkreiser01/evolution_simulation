@@ -3,11 +3,13 @@ package evolution_simulation;
 public class Map {
 	private int height;
     private int width;
+    private int cycle;
     private Tile[][] ground;
     
     private Animal[] animals;
 
     public Map(int h, int w) {
+    	cycle = 0;
         height = h;
         width = w;
         ground = new Tile[h][w];
@@ -15,7 +17,7 @@ public class Map {
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
             	int[] tmp = {i, j};
-                ground[i][j] = new Tile(tmp, new Ground(' '));
+                ground[i][j] = new Tile(tmp, new Ground());
             }
         }
     }
@@ -52,6 +54,21 @@ public class Map {
         animals = arr;
     }
     
+    public void plant(Ground[] arr) {
+    	for (Ground g : arr) {
+            for (int i = 0; i < width * height; i++) {
+                int rand_x = (int)(Math.random()*(height));
+                int rand_y = (int)(Math.random()*(width));
+                
+                if (ground[rand_x][rand_y].getType() == 'G') {
+                    ground[rand_x][rand_y].setObj(g);
+                    g.setTile(ground[rand_x][rand_y]);
+                    break;
+                }
+            }
+        }
+    }
+    
     public Tile swapTiles(Tile a, Tile b) {
     	int[] a_c = a.getCoords();
     	int[] b_c = b.getCoords();
@@ -79,11 +96,41 @@ public class Map {
         	// Clean up the dead
         	for (Animal a : animals) {
         		if (a.isDead()) {
-        			a.getTile().setObj(new Ground(' '));
+        			a.getTile().setObj(new Ground());
         		}
         	}
+        	cycle++;
         }
     }
+    
+    public String observe() {
+    	StringBuilder r_str = new StringBuilder();
+    	int animals_alive = 0;
+    	int grass_count = 0;
+    	
+    	
+    	for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                switch (ground[i][j].getType()) {
+                	case 'A':
+                		System.out.println(ground[i][j].getObj());
+                		animals_alive++;
+                		break;
+                	case 'G':
+                		grass_count++;
+                		break;
+                }
+            	
+            }
+        }
+    	r_str.append("Cycle: " + cycle + '\n');
+    	r_str.append("Animals Alive: " + animals_alive + '\n');
+    	r_str.append("Grass Count: " + grass_count);
+    	
+    	return r_str.toString();
+    }
+    
+    
     public String toString() {
         StringBuilder r_str = new StringBuilder();
         
@@ -135,15 +182,7 @@ public class Map {
             r_str.append("|\n");
         }
         
-        int animal_count = 0;
-        for (Animal a : animals) {
-        	if (!a.isDead()) {
-        		animal_count++;
-        	}
-    	}
-        
-        
-        r_str.append("Alive Animal: " + animal_count + '\n');
+        r_str.append(this.observe());
 
         return r_str.toString();
     }
