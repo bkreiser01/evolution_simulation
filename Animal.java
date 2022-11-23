@@ -10,6 +10,7 @@ public class Animal extends Tileable {
 	
 	private boolean dead; 			// either dead or alive
 	private boolean prego;
+	private boolean herbavore;
 	
 	
 	// Constructors
@@ -25,6 +26,7 @@ public class Animal extends Tileable {
         this.setReproductiveUrge(0);
         this.setPrego(false);
         this.setDeath(false);
+        this.setHerbavore(true);
     }
 
     // Getters
@@ -60,6 +62,10 @@ public class Animal extends Tileable {
     	return prego;
     }
     
+    public boolean isHerbavore() {
+    	return herbavore;
+    }
+    
     // Setters
     public void setType(char c) {
         type = c;
@@ -91,6 +97,10 @@ public class Animal extends Tileable {
     
     private void setDeath(boolean b) {
     	dead = b;
+    }
+    
+    public void setHerbavore(boolean b) {
+    	herbavore = b;
     }
     
     // Methods
@@ -133,15 +143,14 @@ public class Animal extends Tileable {
     		return -1;
     	}
     	
-    	if (nextTile.getType() != ' ' && nextTile.getType() != this.getTile().getType()) {
-    		if (nextTile.getType() == 'G' ) {
-    			hunger += ((Ground)(nextTile.getObj())).eat();
+    	
+    	if (nextTile.getType() != "Ground " && nextTile.getType() != this.getTile().getType()) {
+    		if (this.isHerbavore() && nextTile.getType() == "Grass") {
+    			hunger += ((Grass)(nextTile.getObj())).eat();
+    			return 0;
     		}
     		this.setTile(this.getMap().swapTiles(this.getTile(), nextTile));
-    		return 0;
-    	}
-    	
-    	if (nextTile.getType() != ' ' && nextTile.getType() == this.getTile().getType()) {
+    	} else if (nextTile.getType() == "Animal" && nextTile.getType() == this.getTile().getType()) {
     		Animal potential_mate = (Animal)(nextTile.getObj());
     		
     		if (potential_mate.getGender() != this.getGender()
@@ -155,7 +164,6 @@ public class Animal extends Tileable {
     			reproductive_urge = 0;
     			potential_mate.setReproductiveUrge(0);
     		}
-    		return 0;
     	}
     	
     	this.setTile(this.getMap().swapTiles(this.getTile(), nextTile));
@@ -169,7 +177,7 @@ public class Animal extends Tileable {
 		Tile[] s_tiles = this.getMap().surroundingTiles(this.getTile().getCoords(), 1);
 		
 		for (Tile t : s_tiles) {
-			if (t.getType() == ' ') {
+			if (t.getType() == "Grass") {
 				t.setObj(new Rabbit(this.getMap()));
 				break;
 			}
@@ -181,7 +189,6 @@ public class Animal extends Tileable {
     }
     
     public void update() {
-    	
     	int rand_d = 0;
     	int moved = -1;
     	

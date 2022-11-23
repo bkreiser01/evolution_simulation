@@ -7,7 +7,7 @@ public class Map {
     private Tile[][] ground;
     
     private Animal[] animals;
-    private Ground[] plants;
+    private Grass[] plants;
 
     public Map(int h, int w) {
     	cycle = 0;
@@ -39,12 +39,13 @@ public class Map {
     
     // Methods
     public void populate(Animal[] arr) {
+    	
         for (Animal a : arr) {
             for (int i = 0; i < width * height; i++) {
                 int rand_y = (int)(Math.random()*(height));
                 int rand_x = (int)(Math.random()*(width));
-                
-                if (ground[rand_y][rand_x].getType() == ' ') {
+                if (ground[rand_y][rand_x].getType() == "Ground") {
+                	
                     ground[rand_y][rand_x].setObj(a);
                     a.setTile(ground[rand_y][rand_x]);
                     break;
@@ -55,13 +56,13 @@ public class Map {
         animals = arr;
     }
     
-    public void plant(Ground[] arr) {
-    	for (Ground g : arr) {
+    public void plant(Grass[] arr) {
+    	for (Grass g : arr) {
             for (int i = 0; i < width * height; i++) {
                 int rand_y = (int)(Math.random()*(height));
                 int rand_x = (int)(Math.random()*(width));
                 
-                if (ground[rand_y][rand_x].getType() == ' ') {
+                if (ground[rand_y][rand_x].getType() == "Ground") {
                     ground[rand_y][rand_x].setObj(g);
                     g.setTile(ground[rand_y][rand_x]);
                     break;
@@ -121,7 +122,7 @@ public class Map {
         	
         	// Update plants
         	if (plants != null) {
-        		for (Ground p : plants) {
+        		for (Grass p : plants) {
             		p.update();
             	}
         	}
@@ -143,23 +144,18 @@ public class Map {
     	int animals_alive = 0;
     	int rabbits_alive = 0;
     	int rabbit_males = 0;
-    	int grass_count = 0;
     	
     	for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 switch (ground[i][j].getType()) {
-                	case 'A':
+                	case "Animal":
                 		animals_alive++;
                 		break;
-                	case 'R':
+                	case "Rabbit":
                 		rabbits_alive++;
-                		//System.out.println(ground[i][j].getObj());
                 		if (((Rabbit)(ground[i][j].getObj())).getGender() == 0) {
                 			rabbit_males++;
                 		}
-                		break;
-                	case 'G':
-                		grass_count++;
                 		break;
                 }
             	
@@ -171,7 +167,6 @@ public class Map {
     	r_str.append("Rabbits Alive: " + rabbits_alive + '\n');
     	r_str.append("    M: " + rabbit_males + '\n');
     	r_str.append("    F: " + (rabbits_alive - rabbit_males) + '\n');
-    	r_str.append("Grass Count: " + grass_count + '\n');
     	
     	return r_str.toString();
     }
@@ -195,7 +190,17 @@ public class Map {
             for (int i = 0; i < height; i++) {
                 r_str.append(i + "|");
                 for (int j = 0; j < width; j++) {
-                	r_str.append(ground[i][j].getType());
+                	switch (ground[i][j].getType()) {
+                		case "Ground":
+                			r_str.append(' ');
+                			break;
+                		case "Animal":
+                			r_str.append('A');
+                			break;
+                		case "Rabbit":
+                			r_str.append('R');
+                			break;
+                	}
                 }
                 r_str.append("|\n");
             }
@@ -216,7 +221,18 @@ public class Map {
             for (int i = 0; i < height; i++) {
                 r_str.append("|");
                 for (int j = 0; j < width; j++) {
-                	r_str.append(ground[i][j].getType());
+                	switch (ground[i][j].getType()) {
+            		case "Ground":
+            		case "Grass":
+            			r_str.append(' ');
+            			break;
+            		case "Animal":
+            			r_str.append('A');
+            			break;
+            		case "Rabbit":
+            			r_str.append('R');
+            			break;
+            	}
                 }
                 r_str.append("|\n");
             }

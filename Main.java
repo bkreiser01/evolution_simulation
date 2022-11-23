@@ -4,10 +4,11 @@ public class Main {
 	private static final int map_x = 50;			//Map Height
 	private static final int map_y = 50;			//Map Width
 	
-	private static final int animal_c = 100; 		//Animal Count
+	private static final int animal_c = 100; 			//Animal Count
 	
 	private static final int plants_c = 200; 		//Plants Count
-	private static final int plants_g = 20;			//Plants Growth Period
+	private static final int plant_nutrition = 20;
+	private static final int plants_g = 5;			//Plants Growth Period
 	
 	private static final int iterations = 10000; 	//World iterations
 	
@@ -15,21 +16,24 @@ public class Main {
 	public static void main(String args[]) {
         Map world = new Map(map_x,map_y);
         Animal[] animals = new Animal[animal_c];
-        Ground[] plants = new Ground[plants_c];
-
+        Grass[] plants = new Grass[plants_c];
+        
         for (int i = 0; i < animals.length; i++) {
             animals[i] = new Rabbit(world);
         }
 
         for (int i = 0; i < plants.length; i++) {
-        	plants[i] = new Ground(world, plants_g);
+        	plants[i] = new Grass(world, plants_g, plant_nutrition);
         }
 
         world.populate(animals);
         world.plant(plants);
         
+        //System.out.print(world);
         System.out.println(world.observe());
         world.update(iterations);
+        //System.out.print(world);
         System.out.println(world.observe());
+        
     }
 }

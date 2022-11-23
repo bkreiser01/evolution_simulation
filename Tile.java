@@ -19,19 +19,19 @@ public class Tile{
     	return obj;
     }
     
-    public char getType(){
+    public String getType(){
+    	// i do not know why i need a switch case here, but it doesn't work otherwise so..
         switch (((Object)obj).getClass().getSimpleName()) {
         	case "Rabbit":
-        		return 'R';
+        		return "Rabbit";
         	case "Animal":
-                return 'A';
+                return "Animal";
             case "Ground":
-            	if (((Ground)(obj)).hasGrass()) {
-            		return 'G';
-            	}
-            	return ' ';
+            	return "Ground";
+            case "Grass":
+            	return "Grass";
             default:
-                return 'N';
+                return "None";
         }
     }
     
@@ -44,14 +44,10 @@ public class Tile{
     	obj = o;
     }
     
-    public void print() {
-    	System.out.println(this);
-    }
-    
     public String toString() {
     	return "[TILE]\n"
     		 + "Type: " + this.getType() + "\n"
     		 + "Coords: " + cords[1] + ", " + cords[0] + "\n"
-    		 + "------";
+    		 + "------\n";
     }
 }
