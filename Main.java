@@ -6,9 +6,9 @@ public class Main {
 	
 	private static final int animal_c = 100; 			//Animal Count
 	
-	private static final int plants_c = 200; 		//Plants Count
-	private static final int plant_nutrition = 20;
-	private static final int plants_g = 5;			//Plants Growth Period
+	private static final int plants_c = 500; 		//Plants Count
+	private static final int plant_nutrition = 50;
+	private static final int plants_g = 10;			//Plants Growth Period
 	
 	private static final int iterations = 10000; 	//World iterations
 	
