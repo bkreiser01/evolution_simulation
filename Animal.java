@@ -1,17 +1,18 @@
 package evolution_simulation;
 
 public class Animal extends Tileable {
+	// Attributes (these dont change between generations
+	private boolean dead; 			// either dead or alive
+	private boolean prego;			// prego or no prego
+	private boolean herbavore;		// eats only veggies
 	private char type;				// type of animal
 	private int hunger; 			// max 100, min 0 - starts at 100
-	private int m_factor; 			// metabolism factor 1-5
-	private int gender; 			// 0 for male, 1 for female
 	private int reproductive_urge; 	// max 100, min 0 - starts at 0
-	private int prego_term;
 	
-	private boolean dead; 			// either dead or alive
-	private boolean prego;
-	private boolean herbavore;
-	
+	// Genetics
+	private int m_factor; 			// metabolism factor 1-5
+	private int prego_term;         // length of pregnancy
+	private int gender; 			// 0 for male, 1 for female
 	
 	// Constructors
     public Animal(Map w) {

@@ -163,7 +163,7 @@ public class Map {
         }
     	
     	r_str.append("Cycle: " + cycle + '\n');
-    	r_str.append("Animals Alive: " + (animals_alive + rabbits_alive) + '\n');
+    	//r_str.append("Animals Alive: " + (animals_alive + rabbits_alive) + '\n');
     	r_str.append("Rabbits Alive: " + rabbits_alive + '\n');
     	r_str.append("    M: " + rabbit_males + '\n');
     	r_str.append("    F: " + (rabbits_alive - rabbit_males) + '\n');

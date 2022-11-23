@@ -10,7 +10,7 @@ public class Main {
 	private static final int plant_nutrition = 50;
 	private static final int plants_g = 10;			//Plants Growth Period
 	
-	private static final int iterations = 10000; 	//World iterations
+	private static final int iterations = 1000000; 	//World iterations
 	
 	
 	public static void main(String args[]) {
