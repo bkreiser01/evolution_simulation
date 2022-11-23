@@ -1,8 +1,8 @@
 package evolution_simulation;
 
 public class Rabbit extends Animal{
-	public Rabbit() {
-		super();
+	public Rabbit(Map m) {
+		super(m);
 		this.setType('R');
 	}
 }

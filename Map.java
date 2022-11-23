@@ -18,7 +18,7 @@ public class Map {
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
             	int[] tmp = {i, j};
-                ground[i][j] = new Tile(tmp, new Ground());
+                ground[i][j] = new Tile(tmp, new Ground(this));
             }
         }
     }
@@ -41,12 +41,12 @@ public class Map {
     public void populate(Animal[] arr) {
         for (Animal a : arr) {
             for (int i = 0; i < width * height; i++) {
-                int rand_x = (int)(Math.random()*(height));
-                int rand_y = (int)(Math.random()*(width));
+                int rand_y = (int)(Math.random()*(height));
+                int rand_x = (int)(Math.random()*(width));
                 
-                if (ground[rand_x][rand_y].getType() == ' ') {
-                    ground[rand_x][rand_y].setObj(a);
-                    a.setTile(ground[rand_x][rand_y]);
+                if (ground[rand_y][rand_x].getType() == ' ') {
+                    ground[rand_y][rand_x].setObj(a);
+                    a.setTile(ground[rand_y][rand_x]);
                     break;
                 }
             }
@@ -58,12 +58,12 @@ public class Map {
     public void plant(Ground[] arr) {
     	for (Ground g : arr) {
             for (int i = 0; i < width * height; i++) {
-                int rand_x = (int)(Math.random()*(height));
-                int rand_y = (int)(Math.random()*(width));
+                int rand_y = (int)(Math.random()*(height));
+                int rand_x = (int)(Math.random()*(width));
                 
-                if (ground[rand_x][rand_y].getType() == ' ') {
-                    ground[rand_x][rand_y].setObj(g);
-                    g.setTile(ground[rand_x][rand_y]);
+                if (ground[rand_y][rand_x].getType() == ' ') {
+                    ground[rand_y][rand_x].setObj(g);
+                    g.setTile(ground[rand_y][rand_x]);
                     break;
                 }
             }
@@ -87,13 +87,33 @@ public class Map {
     	return ground[b_c[0]][b_c[1]];
     }
     
-    public void update(int count) {
+    public Tile[] surroundingTiles(int[] c, int r) {
+    	Tile[] tile_arr = new Tile[((3+(2*(r-1)))*(3+(2*(r-1))))];
+    	
+    	int tile_count = 0;
+    	for (int y = c[0] - r; y < (c[0] - r) + ((3+(2*(r-1)))); y++) {
+    		for (int x = c[1] - r; x < (c[1] - r) + ((3+(2*(r-1)))); x++) {
+    			if (x >= 0 && y >= 0 && ground[y][x] != ground[c[0]][c[1]]) {
+    				tile_arr[tile_count] = ground[y][x];
+    				tile_count++;
+    			}
+    		}
+    	}
+    	 Tile[] ret_arr = new Tile[tile_count];
+    	 
+    	 for (int i = 0; i < tile_count; i++) {
+    		 ret_arr[i] = tile_arr[i];
+    	 }
+    	return ret_arr;
+    }
+    
+    public void update(int count, Map m) {
     	for (int i = 0; i < count; i++) {
     		// Update animals
     		if (animals != null) {
     			for (Animal a : animals) {
             		if (!a.isDead()) {
-            			a.update(this);
+            			a.update();
             		}
             	}
     		}
@@ -109,7 +129,7 @@ public class Map {
         	if (animals != null) {
         		for (Animal a : animals) {
             		if (a.isDead()) {
-            			a.getTile().setObj(new Ground());
+            			a.getTile().setObj(new Ground(this));
             		}
             	}
         	}

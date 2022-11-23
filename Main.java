@@ -18,19 +18,17 @@ public class Main {
         Ground[] plants = new Ground[plants_c];
 
         for (int i = 0; i < animals.length; i++) {
-            animals[i] = new Rabbit();
+            animals[i] = new Rabbit(world);
         }
 
         for (int i = 0; i < plants.length; i++) {
-        	plants[i] = new Ground(plants_g);
+        	plants[i] = new Ground(world, plants_g);
         }
 
         world.populate(animals);
         world.plant(plants);
-        
-        System.out.println(world);
         System.out.println(world.observe());
-        world.update(iterations);
+        world.update(iterations, world);
         System.out.println(world);
         System.out.println(world.observe());
     }

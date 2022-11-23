@@ -6,18 +6,25 @@ public class Animal extends Tileable {
 	private int m_factor; 			// metabolism factor 1-5
 	private int gender; 			// 0 for male, 1 for female
 	private int reproductive_urge; 	// max 100, min 0 - starts at 0
+	private int prego_term;
+	
 	private boolean dead; 			// either dead or alive
+	private boolean prego;
 	
 	
 	// Constructors
-    public Animal() {
-    	super();
+    public Animal(Map w) {
+    	super(w);
         this.setType('A');
         this.setHunger(100);
         this.setGender((int)(Math.random()*(2)));
+        if (this.getGender() != 0) {
+        	this.setPTerm(10);
+        }
         this.setMFactor((int)(Math.random()*(5))+1);
         this.setReproductiveUrge(0);
-        dead = false;
+        this.setPrego(false);
+        this.setDeath(false);
     }
 
     // Getters
@@ -41,8 +48,16 @@ public class Animal extends Tileable {
     	return reproductive_urge;
     }
     
+    public int getPTerm() {
+    	return prego_term;
+    } 
+    
     public boolean isDead() {
     	return dead;
+    }
+    
+    public boolean isPrego() {
+    	return prego;
     }
     
     // Setters
@@ -66,35 +81,47 @@ public class Animal extends Tileable {
     	reproductive_urge = i;
     }
     
+    public void setPTerm(int i) {
+    	prego_term = i;
+    }
+    
+    private void setPrego(boolean b) {
+    	prego = b;
+    }
+    
+    private void setDeath(boolean b) {
+    	dead = b;
+    }
+    
     // Methods
-	private int moveD(Map world, int d) {
+	private int moveD(int d) {
     	int[] c = this.getTile().getCoords();
     	Tile nextTile;
     	
     	switch (d) {
     		case 0: // north
-    			nextTile = world.getTile(c[0]-1, c[1]);
+    			nextTile = this.getMap().getTile(c[0]-1, c[1]);
     			break;
     		case 1: // north-east
-    			nextTile = world.getTile(c[0]-1, c[1]+1);
+    			nextTile = this.getMap().getTile(c[0]-1, c[1]+1);
     			break;
     		case 2: // east
-    			nextTile = world.getTile(c[0], c[1]+1);
+    			nextTile = this.getMap().getTile(c[0], c[1]+1);
     			break;
     		case 3: // south-east
-    			nextTile = world.getTile(c[0]+1, c[1]+1);
+    			nextTile = this.getMap().getTile(c[0]+1, c[1]+1);
     			break;
     		case 4:  // south
-    			nextTile = world.getTile(c[0]+1, c[1]);
+    			nextTile = this.getMap().getTile(c[0]+1, c[1]);
     			break;
     		case 5: // south-west
-    			nextTile = world.getTile(c[0]+1, c[1]-1);
+    			nextTile = this.getMap().getTile(c[0]+1, c[1]-1);
     			break;
     		case 6: // west
-    			nextTile = world.getTile(c[0], c[1]-1);
+    			nextTile = this.getMap().getTile(c[0], c[1]-1);
     			break;
     		case 7: // north-west
-    			nextTile = world.getTile(c[0]-1, c[1]-1);
+    			nextTile = this.getMap().getTile(c[0]-1, c[1]-1);
     			break;
     		default:
     			nextTile = null;
@@ -110,45 +137,69 @@ public class Animal extends Tileable {
     		if (nextTile.getType() == 'G' ) {
     			hunger += ((Ground)(nextTile.getObj())).eat();
     		}
-    		this.setTile(world.swapTiles(this.getTile(), nextTile));
+    		this.setTile(this.getMap().swapTiles(this.getTile(), nextTile));
     		return 0;
     	}
     	
     	if (nextTile.getType() != ' ' && nextTile.getType() == this.getTile().getType()) {
     		Animal potential_mate = (Animal)(nextTile.getObj());
     		
-    		if (potential_mate.getGender() != this.getGender() && reproductive_urge > hunger) {
-    			System.out.println("MATE FOUND :)");
+    		if (potential_mate.getGender() != this.getGender()
+    				&& potential_mate.getReproductiveUrge() > potential_mate.getHunger()
+    				&& reproductive_urge > hunger) {
+    			if (gender != 0) {
+    				prego = true;
+    			} else {
+    				potential_mate.setPrego(true);
+    			}
     			reproductive_urge = 0;
+    			potential_mate.setReproductiveUrge(0);
     		}
     		return 0;
     	}
     	
-    	this.setTile(world.swapTiles(this.getTile(), nextTile));
+    	this.setTile(this.getMap().swapTiles(this.getTile(), nextTile));
 		hunger -= m_factor;
 		return 0;
     	
     	
     }
 	
-    public void kill(Map world) {
-    	dead = true;
+	private void birth() {
+		System.out.println("BABY BUNNY");
+    }
+	
+    public void kill() {
+    	this.setDeath(true);
     }
     
-    public void update(Map world) {
+    public void update() {
+    	
     	int rand_d = 0;
     	int moved = -1;
     	
     	while (moved == -1) {
     		rand_d = (int)(Math.random()*(8));
-    		moved = this.moveD(world, rand_d);
+    		moved = this.moveD(rand_d);
     	}
 
     	if (hunger <= 0) {
-    		this.kill(world);
+    		this.kill();
     	}
     	
-    	reproductive_urge += (int)(Math.random()*(5));
+    	if (!this.isPrego()) {
+        	reproductive_urge += (int)(Math.random()*(5));
+    	}
+    	
+    	if (this.isPrego()) {
+    		if (this.getPTerm() == 0) {
+    			this.birth();
+    			this.setPrego(false);
+    			this.setPTerm(10);
+    		} else {
+    			this.setPTerm(this.getPTerm()-1);
+    		}
+    	}
     }
     
     public String toString() {
@@ -157,6 +208,8 @@ public class Animal extends Tileable {
     		 + "Gender: " + gender + '\n'
     		 + "Hunger: " + hunger + '\n'
     		 + "M_factor: " + m_factor + '\n'
+    		 + "Reproductive Urge: " + reproductive_urge + '\n'
+    		 + "isPrego: " + prego + '\n'
     		 + "isDead: " + dead + '\n'
     		 + "------";
     }

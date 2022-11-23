@@ -7,13 +7,15 @@ public class Ground extends Tileable {
 	
 	
 	// Constructors
-	public Ground(int i) {
+	public Ground(Map m,int i) {
+		super(m);
 		grass = true;
 		growth_time = 0;
 		growth_period = i;
 	}
 	
-	public Ground() {
+	public Ground(Map m) {
+		super(m);
 		grass = false;
 		growth_time = 0;
 		growth_period = 0;
