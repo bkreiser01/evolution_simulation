@@ -7,9 +7,9 @@ public class Main {
 	private static final int animal_c = 100; 	//Animal Count
 	
 	private static final int plants_c = 200; 	//Plants Count
-	private static final int plants_g = 10;		//Plants Growth Period
+	private static final int plants_g = 20;		//Plants Growth Period
 	
-	private static final int iterations = 1000; 	//World iterations
+	private static final int iterations = 10000; 	//World iterations
 	
 	
 	public static void main(String args[]) {
@@ -27,9 +27,9 @@ public class Main {
 
         world.populate(animals);
         world.plant(plants);
+        
         System.out.println(world.observe());
-        world.update(iterations, world);
-        System.out.println(world);
+        world.update(iterations);
         System.out.println(world.observe());
     }
 }

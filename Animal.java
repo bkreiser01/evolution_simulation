@@ -166,7 +166,14 @@ public class Animal extends Tileable {
     }
 	
 	private void birth() {
-		System.out.println("BABY BUNNY");
+		Tile[] s_tiles = this.getMap().surroundingTiles(this.getTile().getCoords(), 1);
+		
+		for (Tile t : s_tiles) {
+			if (t.getType() == ' ') {
+				t.setObj(new Rabbit(this.getMap()));
+				break;
+			}
+		}
     }
 	
     public void kill() {

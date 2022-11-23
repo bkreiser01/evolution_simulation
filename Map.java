@@ -93,7 +93,8 @@ public class Map {
     	int tile_count = 0;
     	for (int y = c[0] - r; y < (c[0] - r) + ((3+(2*(r-1)))); y++) {
     		for (int x = c[1] - r; x < (c[1] - r) + ((3+(2*(r-1)))); x++) {
-    			if (x >= 0 && y >= 0 && ground[y][x] != ground[c[0]][c[1]]) {
+    			if (x >= 0 && y >= 0 && x < width && y < height 
+    					&& ground[y][x] != ground[c[0]][c[1]]) {
     				tile_arr[tile_count] = ground[y][x];
     				tile_count++;
     			}
@@ -107,7 +108,7 @@ public class Map {
     	return ret_arr;
     }
     
-    public void update(int count, Map m) {
+    public void update(int count) {
     	for (int i = 0; i < count; i++) {
     		// Update animals
     		if (animals != null) {
@@ -152,6 +153,7 @@ public class Map {
                 		break;
                 	case 'R':
                 		rabbits_alive++;
+                		//System.out.println(ground[i][j].getObj());
                 		if (((Rabbit)(ground[i][j].getObj())).getGender() == 0) {
                 			rabbit_males++;
                 		}
