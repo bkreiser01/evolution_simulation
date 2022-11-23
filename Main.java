@@ -1,13 +1,13 @@
 package evolution_simulation;
 
 public class Main {
-	private static final int map_x = 50;		//Map Height
-	private static final int map_y = 50;		//Map Width
+	private static final int map_x = 50;			//Map Height
+	private static final int map_y = 50;			//Map Width
 	
-	private static final int animal_c = 100; 	//Animal Count
+	private static final int animal_c = 100; 		//Animal Count
 	
-	private static final int plants_c = 200; 	//Plants Count
-	private static final int plants_g = 20;		//Plants Growth Period
+	private static final int plants_c = 200; 		//Plants Count
+	private static final int plants_g = 20;			//Plants Growth Period
 	
 	private static final int iterations = 10000; 	//World iterations
 	
